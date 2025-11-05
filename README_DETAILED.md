@@ -4,6 +4,17 @@
 
 SynthesiaCanvas 2.0 is a comprehensive platform that empowers users to design, connect, test, and deploy agentic AI systems through an intuitive drag-and-drop visual interface. The platform democratizes AI agent development by providing a no-code/low-code environment while maintaining professional-grade capabilities for complex agentic workflows.
 
+### 🚀 Revolutionary Differentiator: **NO VENDOR LOCK-IN**
+
+Unlike platforms like Base44, Replit, Lovable, and other no-code tools that trap your work in their ecosystem, **SynthesiaCanvas gives you complete ownership of your code**. Every design you create can be exported as:
+
+- **Fully functional Python code** with AutoGen/LangChain orchestration
+- **Production-ready Docker Compose files** for immediate deployment
+- **Complete source code** that you own, modify, and deploy anywhere
+- **No platform dependency** - your exported code runs independently
+
+**Your IP. Your Code. Your Freedom.**
+
 ### Core Value Propositions
 
 - **Visual Design Interface**: Rich drag-and-drop canvas for designing multi-agent systems
@@ -12,6 +23,7 @@ SynthesiaCanvas 2.0 is a comprehensive platform that empowers users to design, c
 - **Local Deployment**: Deploy agentic systems to local Docker Desktop instances
 - **MCP Server Integration**: Expose platform capabilities via Model Context Protocol for external system access
 - **Subscription Model**: Multi-tier platform accessible to all subscribers
+- **🔓 ZERO VENDOR LOCK-IN**: Export complete, runnable code - your design, your code, your control
 
 ## 🏗️ Architecture Overview
 
@@ -42,6 +54,14 @@ SynthesiaCanvas 2.0 is a comprehensive platform that empowers users to design, c
 │  │  • Tool Exposure API                                 │  │
 │  │  • Prompt Management                                 │  │
 │  │  • External Integration Gateway                      │  │
+│  └──────────────────────────────────────────────────────┘  │
+│                          ↕                                   │
+│  ┌──────────────────────────────────────────────────────┐  │
+│  │         Code Generation & Export Engine (NEW!)       │  │
+│  │  • Python Code Generator (AutoGen/LangChain)         │  │
+│  │  • Docker Compose Generator                          │  │
+│  │  • Requirements.txt Generator                        │  │
+│  │  • Zero Vendor Lock-in Export                        │  │
 │  └──────────────────────────────────────────────────────┘  │
 │                          ↕                                   │
 │  ┌──────────────────────────────────────────────────────┐  │
@@ -177,6 +197,8 @@ cd synthesiacanvas2.0
 - Community support
 - Basic agent templates
 - 1 concurrent deployment
+- **✅ Full code export** (Python + Docker Compose)
+- **✅ Complete code ownership**
 
 ### Professional Tier
 - Unlimited agents
@@ -185,6 +207,9 @@ cd synthesiacanvas2.0
 - Custom integrations
 - 5 concurrent deployments
 - MCP Server access (basic)
+- **✅ Advanced code export** (AutoGen, LangChain, CrewAI)
+- **✅ Kubernetes manifests**
+- **✅ CI/CD pipeline configs**
 
 ### Enterprise Tier
 - Everything in Professional
@@ -195,6 +220,9 @@ cd synthesiacanvas2.0
 - Full MCP Server access
 - On-premise deployment options
 - SLA guarantees
+- **✅ Custom code templates**
+- **✅ White-label code export**
+- **✅ Enterprise orchestration frameworks**
 
 ## 🔐 Security Considerations
 
