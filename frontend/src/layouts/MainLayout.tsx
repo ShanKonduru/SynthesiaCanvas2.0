@@ -17,7 +17,8 @@ import {
   MenuItem,
   Divider,
   Badge,
-  Tooltip
+  Tooltip,
+  ListItemIcon as MenuListItemIcon,
 } from '@mui/material';
 import {
   Dashboard as DashboardIcon,
@@ -33,9 +34,15 @@ import {
   Info as InfoIcon,
   Help as HelpIcon,
   Logout as LogoutIcon,
+  Palette as PaletteIcon,
+  LightMode as LightModeIcon,
+  DarkMode as DarkModeIcon,
+  Waves as WavesIcon,
 } from '@mui/icons-material';
 import { mockUser } from '../data/mockData';
 import Logo from '../components/Logo';
+import { useThemeContext } from '../contexts/ThemeContext';
+import type { ThemeMode } from '../theme';
 
 const drawerWidth = 260;
 const drawerWidthCollapsed = 65;
@@ -55,8 +62,10 @@ export default function MainLayout() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [themeMenuAnchor, setThemeMenuAnchor] = useState<null | HTMLElement>(null);
   const navigate = useNavigate();
   const location = useLocation();
+  const { themeMode, setThemeMode } = useThemeContext();
 
   const currentDrawerWidth = sidebarOpen ? drawerWidth : drawerWidthCollapsed;
 
@@ -66,6 +75,32 @@ export default function MainLayout() {
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
+  };
+
+  const handleThemeMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setThemeMenuAnchor(event.currentTarget);
+  };
+
+  const handleThemeMenuClose = () => {
+    setThemeMenuAnchor(null);
+  };
+
+  const handleThemeChange = (mode: ThemeMode) => {
+    setThemeMode(mode);
+    handleThemeMenuClose();
+  };
+
+  const getThemeIcon = () => {
+    switch (themeMode) {
+      case 'light':
+        return <LightModeIcon />;
+      case 'dark':
+        return <DarkModeIcon />;
+      case 'ocean':
+        return <WavesIcon />;
+      default:
+        return <PaletteIcon />;
+    }
   };
 
   const handleProfileMenuClose = () => {
@@ -170,7 +205,7 @@ export default function MainLayout() {
         sx={{
           width: { sm: `calc(100% - ${currentDrawerWidth}px)` },
           ml: { sm: `${currentDrawerWidth}px` },
-          backgroundColor: 'white',
+          backgroundColor: 'background.paper',
           borderBottom: '1px solid',
           borderColor: 'divider',
           transition: 'width 0.3s, margin 0.3s',
@@ -202,6 +237,12 @@ export default function MainLayout() {
           </Typography>
 
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Tooltip title="Change Theme">
+              <IconButton onClick={handleThemeMenuOpen} sx={{ color: 'text.secondary' }}>
+                {getThemeIcon()}
+              </IconButton>
+            </Tooltip>
+
             <Tooltip title="Help & Documentation">
               <IconButton color="inherit" sx={{ color: 'text.secondary' }}>
                 <HelpIcon />
@@ -258,6 +299,52 @@ export default function MainLayout() {
             <LogoutIcon fontSize="small" />
           </ListItemIcon>
           Logout
+        </MenuItem>
+      </Menu>
+
+      {/* Theme Selection Menu */}
+      <Menu
+        anchorEl={themeMenuAnchor}
+        open={Boolean(themeMenuAnchor)}
+        onClose={handleThemeMenuClose}
+        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+      >
+        <Box sx={{ px: 2, py: 1.5 }}>
+          <Typography variant="subtitle2" fontWeight={600}>
+            Choose Theme
+          </Typography>
+          <Typography variant="caption" color="text.secondary">
+            Select your preferred color scheme
+          </Typography>
+        </Box>
+        <Divider />
+        <MenuItem 
+          onClick={() => handleThemeChange('light')}
+          selected={themeMode === 'light'}
+        >
+          <MenuListItemIcon>
+            <LightModeIcon fontSize="small" />
+          </MenuListItemIcon>
+          Light Theme
+        </MenuItem>
+        <MenuItem 
+          onClick={() => handleThemeChange('dark')}
+          selected={themeMode === 'dark'}
+        >
+          <MenuListItemIcon>
+            <DarkModeIcon fontSize="small" />
+          </MenuListItemIcon>
+          Dark Theme
+        </MenuItem>
+        <MenuItem 
+          onClick={() => handleThemeChange('ocean')}
+          selected={themeMode === 'ocean'}
+        >
+          <MenuListItemIcon>
+            <WavesIcon fontSize="small" />
+          </MenuListItemIcon>
+          Ocean Theme
         </MenuItem>
       </Menu>
 

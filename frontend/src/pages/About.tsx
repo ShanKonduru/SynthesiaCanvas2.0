@@ -92,8 +92,16 @@ export default function About() {
       </Box>
 
       {/* Mission Statement */}
-      <Paper sx={{ p: 4, mb: 4, background: 'linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%)' }}>
-        <Typography variant="h5" fontWeight={600} gutterBottom>
+      <Paper 
+        sx={{ 
+          p: 4, 
+          mb: 4, 
+          backgroundColor: 'background.paper',
+          border: '2px solid',
+          borderColor: 'primary.main',
+        }}
+      >
+        <Typography variant="h5" fontWeight={600} gutterBottom color="primary.main">
           Our Mission
         </Typography>
         <Typography variant="body1" color="text.secondary" paragraph>
@@ -223,22 +231,42 @@ export default function About() {
       </Box>
 
       {/* Revolutionary Differentiator */}
-      <Paper sx={{ p: 4, mb: 4, background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)' }}>
-        <Typography variant="h5" fontWeight={600} gutterBottom>
+      <Paper 
+        sx={{ 
+          p: 4, 
+          mb: 4, 
+          backgroundColor: 'background.paper',
+          border: '2px solid',
+          borderColor: 'secondary.main',
+        }}
+      >
+        <Typography variant="h5" fontWeight={600} gutterBottom color="secondary.main">
           🚀 Revolutionary Differentiator
         </Typography>
-        <Typography variant="h6" color="text.secondary" gutterBottom>
+        <Typography variant="h6" color="text.primary" gutterBottom>
           Zero Vendor Lock-in - Your Code, Your Infrastructure
         </Typography>
-        <Typography variant="body1" paragraph>
+        <Typography variant="body1" color="text.secondary" paragraph>
           Unlike competitors (Base44, Replit, Lovable) that trap you in their ecosystems, 
           SynthesiaCanvas exports your workflows as standalone Python wheel files. Deploy anywhere - 
           AWS, Azure, Google Cloud, on-premise, or even your laptop.
         </Typography>
         <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
-          <Chip icon={<TrendingUp />} label="0% Vendor Lock-in" color="success" />
-          <Chip icon={<Code />} label="Export to .whl files" color="primary" />
-          <Chip icon={<CloudDownload />} label="Deploy Anywhere" color="info" />
+          <Chip 
+            icon={<TrendingUp />} 
+            label="0% Vendor Lock-in" 
+            color="success"
+          />
+          <Chip 
+            icon={<Code />} 
+            label="Export to .whl files" 
+            color="primary"
+          />
+          <Chip 
+            icon={<CloudDownload />} 
+            label="Deploy Anywhere" 
+            color="info"
+          />
         </Box>
       </Paper>
 
