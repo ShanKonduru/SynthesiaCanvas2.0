@@ -28,13 +28,17 @@ import {
   Code as CodeIcon,
   Settings as SettingsIcon,
   Menu as MenuIcon,
+  MenuOpen as MenuOpenIcon,
   Notifications as NotificationsIcon,
+  Info as InfoIcon,
   Help as HelpIcon,
-  Logout as LogoutIcon
+  Logout as LogoutIcon,
 } from '@mui/icons-material';
 import { mockUser } from '../data/mockData';
+import Logo from '../components/Logo';
 
 const drawerWidth = 260;
+const drawerWidthCollapsed = 65;
 
 const menuItems = [
   { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
@@ -43,14 +47,18 @@ const menuItems = [
   { text: 'Workflows', icon: <AccountTreeIcon />, path: '/workflows' },
   { text: 'Executions', icon: <PlayCircleIcon />, path: '/executions' },
   { text: 'Code Generation', icon: <CodeIcon />, path: '/code-generation' },
+  { text: 'About', icon: <InfoIcon />, path: '/about' },
   { text: 'Settings', icon: <SettingsIcon />, path: '/settings' },
 ];
 
 export default function MainLayout() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const navigate = useNavigate();
   const location = useLocation();
+
+  const currentDrawerWidth = sidebarOpen ? drawerWidth : drawerWidthCollapsed;
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -71,26 +79,17 @@ export default function MainLayout() {
 
   const drawer = (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-      <Toolbar sx={{ display: 'flex', alignItems: 'center', gap: 1, px: 2 }}>
-        <Box
-          sx={{
-            width: 36,
-            height: 36,
-            borderRadius: 1,
-            background: 'linear-gradient(135deg, #6366f1 0%, #ec4899 100%)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: 'white',
-            fontWeight: 'bold',
-            fontSize: '1.2rem'
-          }}
-        >
-          SC
-        </Box>
-        <Typography variant="h6" component="div" sx={{ fontWeight: 700, color: 'primary.main' }}>
-          SynthesiaCanvas
-        </Typography>
+      <Toolbar sx={{ display: 'flex', alignItems: 'center', gap: 1, px: 2, justifyContent: sidebarOpen ? 'flex-start' : 'center' }}>
+        {sidebarOpen ? (
+          <>
+            <Logo size={36} variant="icon" />
+            <Typography variant="h6" component="div" sx={{ fontWeight: 700, color: 'primary.main' }}>
+              SynthesiaCanvas
+            </Typography>
+          </>
+        ) : (
+          <Logo size={36} variant="icon" />
+        )}
       </Toolbar>
       
       <Divider />
@@ -98,22 +97,28 @@ export default function MainLayout() {
       <List sx={{ flex: 1, px: 1, py: 2 }}>
         {menuItems.map((item) => {
           const isActive = location.pathname.startsWith(item.path);
-          return (
-            <ListItem key={item.text} disablePadding sx={{ mb: 0.5 }}>
-              <ListItemButton
-                onClick={() => handleNavigation(item.path)}
-                sx={{
-                  borderRadius: 1,
-                  backgroundColor: isActive ? 'primary.main' : 'transparent',
-                  color: isActive ? 'white' : 'text.primary',
-                  '&:hover': {
-                    backgroundColor: isActive ? 'primary.dark' : 'action.hover',
-                  },
-                }}
-              >
-                <ListItemIcon sx={{ color: isActive ? 'white' : 'text.secondary', minWidth: 40 }}>
-                  {item.icon}
-                </ListItemIcon>
+          const listItemButton = (
+            <ListItemButton
+              onClick={() => handleNavigation(item.path)}
+              sx={{
+                borderRadius: 1,
+                backgroundColor: isActive ? 'primary.main' : 'transparent',
+                color: isActive ? 'white' : 'text.primary',
+                justifyContent: sidebarOpen ? 'initial' : 'center',
+                px: 2,
+                '&:hover': {
+                  backgroundColor: isActive ? 'primary.dark' : 'action.hover',
+                },
+              }}
+            >
+              <ListItemIcon sx={{ 
+                color: isActive ? 'white' : 'text.secondary', 
+                minWidth: 40,
+                justifyContent: 'center',
+              }}>
+                {item.icon}
+              </ListItemIcon>
+              {sidebarOpen && (
                 <ListItemText 
                   primary={item.text}
                   primaryTypographyProps={{
@@ -121,7 +126,19 @@ export default function MainLayout() {
                     fontWeight: isActive ? 600 : 500,
                   }}
                 />
-              </ListItemButton>
+              )}
+            </ListItemButton>
+          );
+
+          return (
+            <ListItem key={item.text} disablePadding sx={{ mb: 0.5 }}>
+              {sidebarOpen ? (
+                listItemButton
+              ) : (
+                <Tooltip title={item.text} placement="right">
+                  {listItemButton}
+                </Tooltip>
+              )}
             </ListItem>
           );
         })}
@@ -129,17 +146,19 @@ export default function MainLayout() {
 
       <Divider />
       
-      <Box sx={{ p: 2, backgroundColor: 'background.default' }}>
-        <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 0.5 }}>
-          Tenant
-        </Typography>
-        <Typography variant="body2" fontWeight={600}>
-          {mockUser.tenantName}
-        </Typography>
-        <Typography variant="caption" color="text.secondary">
-          {mockUser.role} account
-        </Typography>
-      </Box>
+      {sidebarOpen && (
+        <Box sx={{ p: 2, backgroundColor: 'background.default' }}>
+          <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 0.5 }}>
+            Tenant
+          </Typography>
+          <Typography variant="body2" fontWeight={600}>
+            {mockUser.tenantName}
+          </Typography>
+          <Typography variant="caption" color="text.secondary">
+            {mockUser.role} account
+          </Typography>
+        </Box>
+      )}
     </Box>
   );
 
@@ -149,14 +168,25 @@ export default function MainLayout() {
         position="fixed"
         elevation={0}
         sx={{
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` },
+          width: { sm: `calc(100% - ${currentDrawerWidth}px)` },
+          ml: { sm: `${currentDrawerWidth}px` },
           backgroundColor: 'white',
           borderBottom: '1px solid',
           borderColor: 'divider',
+          transition: 'width 0.3s, margin 0.3s',
         }}
       >
         <Toolbar>
+          <IconButton
+            color="inherit"
+            aria-label="toggle sidebar"
+            edge="start"
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            sx={{ mr: 2, display: { xs: 'none', sm: 'block' }, color: 'text.primary' }}
+          >
+            {sidebarOpen ? <MenuOpenIcon /> : <MenuIcon />}
+          </IconButton>
+
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -233,7 +263,7 @@ export default function MainLayout() {
 
       <Box
         component="nav"
-        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+        sx={{ width: { sm: currentDrawerWidth }, flexShrink: { sm: 0 } }}
       >
         <Drawer
           variant="temporary"
@@ -253,7 +283,14 @@ export default function MainLayout() {
           variant="permanent"
           sx={{
             display: { xs: 'none', sm: 'block' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth, borderRight: '1px solid', borderColor: 'divider' },
+            '& .MuiDrawer-paper': { 
+              boxSizing: 'border-box', 
+              width: currentDrawerWidth, 
+              borderRight: '1px solid', 
+              borderColor: 'divider',
+              transition: 'width 0.3s',
+              overflowX: 'hidden',
+            },
           }}
           open
         >
@@ -266,7 +303,8 @@ export default function MainLayout() {
         sx={{
           flexGrow: 1,
           p: 3,
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
+          width: { sm: `calc(100% - ${currentDrawerWidth}px)` },
+          transition: 'width 0.3s',
           backgroundColor: 'background.default',
           minHeight: '100vh',
         }}

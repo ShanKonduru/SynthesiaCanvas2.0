@@ -10,6 +10,7 @@ import WorkflowBuilder from './pages/WorkflowBuilder';
 import Executions from './pages/Executions';
 import CodeGeneration from './pages/CodeGeneration';
 import Settings from './pages/Settings';
+import About from './pages/About';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
         <Route path="executions" element={<Executions />} />
         <Route path="code-generation" element={<CodeGeneration />} />
         <Route path="settings" element={<Settings />} />
+        <Route path="about" element={<About />} />
       </Route>
     </Routes>
   );
